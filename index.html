@@ -18,6 +18,9 @@
 <meta property="og:description" content="Transformamos flujos de información dispersos en inteligencia táctica. Gestión financiera, control de gestión y asesoría corporativa para medianas empresas chilenas.">
 <meta property="og:url" content="https://www.drmasesorias.cl/">
 <meta property="og:image" content="https://www.drmasesorias.cl/assets/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DRM Asesorías — Optimización financiera y gestión estratégica para empresas">
 <meta property="og:locale" content="es_CL">
 
 <!-- Twitter -->
@@ -25,10 +28,15 @@
 <meta name="twitter:title" content="DRM Asesorías | Inteligencia Estratégica para PyMEs">
 <meta name="twitter:description" content="Gestión financiera, control de gestión y asesoría corporativa para medianas empresas chilenas.">
 <meta name="twitter:image" content="https://www.drmasesorias.cl/assets/og-cover.jpg">
+<meta name="twitter:image:alt" content="DRM Asesorías — Optimización financiera y gestión estratégica para empresas">
 
-<!-- Favicon -->
+<!-- Favicon (isotipo oficial DRM Asesorías) -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="assets/favicon.svg" sizes="any">
+<link rel="icon" href="assets/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="site.webmanifest">
 
 <!-- Fonts: preconnect + preload for performance -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,15 +77,6 @@
 <!-- ============================= ICON SPRITE ============================= -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
   <defs>
-    <g id="icon-stroke-defaults" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></g>
-
-    <symbol id="icon-logo-mark" viewBox="0 0 40 40">
-      <rect x="1" y="1" width="38" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M11 28V12h6.2c4 0 6.6 2.7 6.6 6.9 0 4.3-2.6 6.9-6.7 6.9h-1.6v2.2H11z" fill="currentColor" stroke="none"/>
-      <path d="M14.5 15v10" stroke="#fff" stroke-width="1.6"/>
-      <path d="M20 12l6.5 8-6.5 8" fill="none" stroke="currentColor" stroke-width="2"/>
-    </symbol>
-
     <symbol id="icon-menu" viewBox="0 0 24 24">
       <path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
     </symbol>
@@ -196,14 +195,15 @@
       <path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6" fill="none" stroke="currentColor" stroke-width="1.6"/>
     </symbol>
 
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+      <path d="M20.5 3.5A10.9 10.9 0 0 0 3 17.1L2 22l5.1-1.3A10.9 10.9 0 0 0 20.5 3.5z" fill="currentColor" stroke="none" fill-rule="evenodd" clip-rule="evenodd"/>
+      <path d="M8.4 7.6c.2-.5.4-.5.7-.5h.5c.2 0 .4 0 .6.4.2.5.7 1.7.7 1.9.1.1.1.3 0 .4-.1.2-.1.3-.3.4-.1.2-.3.3-.4.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.4.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.7.8.2.1.4.2.4.3.1.2.1.9-.2 1.7-.3.8-1.7 1.5-2.3 1.6-.6.1-1.3.2-4.2-.9-3.5-1.4-5.7-4.9-5.9-5.2-.2-.2-1.4-1.9-1.4-3.6 0-1.7.9-2.5 1.2-2.9z" fill="#128C7E" stroke="none"/>
+    </symbol>
+
     <symbol id="icon-history-edu" viewBox="0 0 24 24">
       <path d="M4 5h11a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
       <path d="M8 10h6M8 13h6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
       <path d="M17 7h3v12h-3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
-      <path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
   </defs>
 </svg>
@@ -212,8 +212,10 @@
 <header class="site-header">
   <nav class="nav" aria-label="Navegación principal">
     <a class="brand" href="#inicio" aria-label="DRM Asesorías, ir al inicio">
-      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#icon-logo-mark"></use></svg>
-      <span class="brand-name">DRM Asesorías</span>
+      <picture>
+        <source srcset="assets/logo-horizontal.webp" type="image/webp">
+        <img class="brand-logo" src="assets/logo-horizontal.png" alt="DRM Asesorías" width="247" height="105" fetchpriority="high">
+      </picture>
     </a>
 
     <ul class="nav-links" role="list">
@@ -480,9 +482,10 @@
         <div class="founder-visual">
           <div class="founder-frame">
             <div class="founder-frame-glow" aria-hidden="true"></div>
-            <div class="founder-portrait" role="img" aria-label="Retrato representativo de Daniel Romero, fundador de DRM Asesorías">
-              <span class="initials" aria-hidden="true">DR</span>
-            </div>
+            <picture>
+              <source srcset="assets/founder-daniel-romero.webp" type="image/webp">
+              <img class="founder-portrait" src="assets/founder-daniel-romero.jpg" alt="Daniel Romero, fundador de DRM Asesorías" width="1086" height="1357" loading="lazy">
+            </picture>
             <div class="founder-quote-card">
               <h4>Daniel Romero</h4>
               <p class="role">Fundador de DRM Asesorías</p>
@@ -616,7 +619,20 @@
         </div>
 
         <div class="contact-form-wrap">
-          <form class="contact-form" id="contact-form" novalidate>
+          <form class="contact-form" id="contact-form" novalidate
+                action="https://formsubmit.co/contacto@drmasesorias.cl" method="POST">
+            <!-- Configuración de FormSubmit: metadatos del envío -->
+            <input type="hidden" name="_subject" value="Nuevo contacto desde la web de DRM Asesorías">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://www.drmasesorias.cl/#contacto">
+
+            <!-- Honeypot anti-spam: campo señuelo, invisible para personas, visible para bots -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="_honeypot">No completar este campo</label>
+              <input type="text" id="_honeypot" name="_honeypot" tabindex="-1" autocomplete="off">
+            </div>
+
             <div class="form-row">
               <div class="form-field">
                 <label for="fullname">Nombre Completo</label>
@@ -662,8 +678,10 @@
   <div class="container footer-inner">
     <div class="footer-brand">
       <a class="brand" href="#inicio" aria-label="DRM Asesorías, ir al inicio">
-        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#icon-logo-mark"></use></svg>
-        <span class="brand-name">DRM Asesorías</span>
+        <picture>
+          <source srcset="assets/logo-horizontal.webp" type="image/webp">
+          <img class="brand-logo brand-logo--footer" src="assets/logo-horizontal.png" alt="DRM Asesorías" width="247" height="105" loading="lazy">
+        </picture>
       </a>
       <p>Impulsando la madurez operativa y financiera de la mediana empresa en la era digital.</p>
       <p class="copyright">© 2026 DRM Asesorías. Excelencia en Gestión.</p>
@@ -689,6 +707,14 @@
     </div>
   </div>
 </footer>
+
+<!-- ============================= WHATSAPP FLOTANTE ============================= -->
+<!-- NOTA: reemplazar 56900000000 por el número definitivo de WhatsApp (formato: código país + número, sin +, espacios ni guiones). -->
+<a class="whatsapp-fab"
+   href="https://wa.me/56900000000?text=Hola%20Daniel%2C%20vi%20la%20p%C3%A1gina%20de%20DRM%20Asesor%C3%ADas%20y%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20servicios."
+   target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp a DRM Asesorías">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
+</a>
 
 <script src="js/script.js" defer></script>
 </body>

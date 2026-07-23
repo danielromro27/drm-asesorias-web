@@ -285,19 +285,14 @@ svg {
   gap: 12px;
 }
 
-.brand-mark {
-  height: 36px;
-  width: 36px;
-  color: var(--color-primary);
+.brand picture {
+  display: block;
 }
 
-.brand-name {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  letter-spacing: -0.01em;
-  white-space: nowrap;
+.brand-logo {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {
@@ -984,6 +979,10 @@ svg {
   position: relative;
 }
 
+.founder-frame picture {
+  display: block;
+}
+
 .founder-frame-glow {
   position: absolute;
   inset: -16px;
@@ -1003,20 +1002,7 @@ svg {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-ambient-lg);
   object-fit: cover;
-  background: linear-gradient(150deg, #2c2c2c 0%, #111111 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.9);
   overflow: hidden;
-}
-
-.founder-portrait .initials {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 3rem + 4vw, 7rem);
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: 0.02em;
 }
 
 .founder-quote-card {
@@ -1558,6 +1544,14 @@ svg {
   gap: 24px;
 }
 
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -1647,6 +1641,52 @@ svg {
 }
 
 /* ==========================================================================
+   WhatsApp flotante
+   ========================================================================== */
+.whatsapp-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background-color: #25d366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px -6px rgba(37, 211, 102, 0.55);
+  transition: transform var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.whatsapp-fab svg {
+  width: 32px;
+  height: 32px;
+}
+
+.whatsapp-fab:hover,
+.whatsapp-fab:focus-visible {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 16px 34px -6px rgba(37, 211, 102, 0.65);
+}
+
+@media (max-width: 640px) {
+  .whatsapp-fab {
+    right: 16px;
+    bottom: 16px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .whatsapp-fab svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ==========================================================================
    Footer
    ========================================================================== */
 .site-footer {
@@ -1690,9 +1730,8 @@ svg {
   gap: 12px;
 }
 
-.footer-brand .brand-mark {
-  filter: grayscale(1);
-  opacity: 0.85;
+.brand-logo--footer {
+  height: 44px;
 }
 
 .footer-brand p {

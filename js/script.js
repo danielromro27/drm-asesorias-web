@@ -144,23 +144,56 @@
         return;
       }
 
-      // NOTA PARA EL EQUIPO DE DRM ASESORÍAS:
-      // Este formulario valida los datos en el navegador pero, al no existir
-      // un backend propio, no envía la información a ningún servidor todavía.
-      // Para recibir estos mensajes en su correo, conecte este formulario a un
-      // servicio como Formspree, Web3Forms o su propio endpoint, y reemplace
-      // el bloque de abajo por el envío real (fetch/POST).
-      var submitButton = form.querySelector('button[type="submit"]');
-      submitButton.disabled = true;
-      submitButton.textContent = 'Enviando...';
-
-      window.setTimeout(function () {
+      // Honeypot anti-spam: si el campo señuelo viene con contenido, es un bot.
+      // Simulamos una confirmación normal para no delatar la trampa, pero no enviamos nada.
+      var honeypot = form.elements['_honeypot'];
+      if (honeypot && honeypot.value.trim() !== '') {
         statusEl.className = 'form-status is-success';
         statusEl.textContent = 'Gracias. Hemos recibido su solicitud y le responderemos en menos de 24 horas hábiles.';
-        submitButton.disabled = false;
-        submitButton.textContent = 'Enviar solicitud de contacto';
         form.reset();
-      }, 600);
+        return;
+      }
+
+      var submitButton = form.querySelector('button[type="submit"]');
+      var originalButtonText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = 'Enviando...';
+      statusEl.className = 'form-status';
+      statusEl.textContent = '';
+
+      // Envío real mediante el endpoint AJAX de FormSubmit (https://formsubmit.co/).
+      // IMPORTANTE: la primera vez que este formulario reciba un envío real,
+      // FormSubmit enviará un correo de activación a contacto@drmasesorias.cl
+      // pidiendo confirmar la casilla antes de empezar a reenviar los mensajes.
+      var formAction = form.getAttribute('action').replace(
+        'https://formsubmit.co/',
+        'https://formsubmit.co/ajax/'
+      );
+
+      fetch(formAction, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error('Respuesta no exitosa del servidor de formularios.');
+          }
+          return response.json();
+        })
+        .then(function () {
+          statusEl.className = 'form-status is-success';
+          statusEl.textContent = 'Gracias. Hemos recibido su solicitud y le responderemos en menos de 24 horas hábiles.';
+          form.reset();
+        })
+        .catch(function () {
+          statusEl.className = 'form-status is-error';
+          statusEl.textContent = 'No pudimos enviar su solicitud en este momento. Por favor, escríbanos directamente a contacto@drmasesorias.cl.';
+        })
+        .finally(function () {
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText;
+        });
     });
   }
 
