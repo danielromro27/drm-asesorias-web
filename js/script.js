@@ -7,6 +7,59 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* -------------------- Google Analytics 4: helper de eventos --------------------
+     Estructura preparada para medir interacciones clave. No bloquea la ejecución
+     si gtag no está disponible (bloqueadores de anuncios, fallo de red, etc.). */
+  function trackEvent(eventName, params) {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, params || {});
+    }
+  }
+
+  /* Clic en WhatsApp (botón flotante) */
+  var whatsappFab = document.querySelector('.whatsapp-fab');
+  if (whatsappFab) {
+    whatsappFab.addEventListener('click', function () {
+      trackEvent('click_whatsapp', { event_category: 'contacto', event_label: 'whatsapp_flotante' });
+    });
+  }
+
+  /* Clic en enlaces de correo (mailto:) */
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      trackEvent('click_email', { event_category: 'contacto', event_label: link.getAttribute('href') });
+    });
+  });
+
+  /* Clic en enlaces de LinkedIn */
+  document.querySelectorAll('a[href*="linkedin.com"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      trackEvent('click_linkedin', { event_category: 'redes_sociales', event_label: link.getAttribute('href') });
+    });
+  });
+
+  /* -------------------- Header scroll transition -------------------- */
+  var siteHeader = document.querySelector('.site-header');
+
+  if (siteHeader) {
+    var scrollTicking = false;
+    var SCROLL_THRESHOLD = 24;
+
+    var updateHeaderState = function () {
+      siteHeader.classList.toggle('is-scrolled', window.scrollY > SCROLL_THRESHOLD);
+      scrollTicking = false;
+    };
+
+    window.addEventListener('scroll', function () {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(updateHeaderState);
+        scrollTicking = true;
+      }
+    }, { passive: true });
+
+    updateHeaderState();
+  }
+
   /* -------------------- Mobile menu -------------------- */
   var navToggle = document.querySelector('.nav-toggle');
   var mobileMenu = document.getElementById('mobile-menu');
@@ -184,6 +237,7 @@
         .then(function () {
           statusEl.className = 'form-status is-success';
           statusEl.textContent = 'Gracias. Hemos recibido su solicitud y le responderemos en menos de 24 horas hábiles.';
+          trackEvent('form_submit', { event_category: 'contacto', event_label: 'formulario_contacto' });
           form.reset();
         })
         .catch(function () {
