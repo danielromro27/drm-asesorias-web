@@ -38,6 +38,22 @@
     });
   });
 
+  /* -------------------- Tarjetas de empresas: efecto flip -------------------- */
+  document.querySelectorAll('.case-card--client').forEach(function (card) {
+    function toggleFlip() {
+      var isFlipped = card.classList.toggle('is-flipped');
+      card.setAttribute('aria-pressed', String(isFlipped));
+    }
+
+    card.addEventListener('click', toggleFlip);
+    card.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleFlip();
+      }
+    });
+  });
+
   /* -------------------- Header scroll transition -------------------- */
   var siteHeader = document.querySelector('.site-header');
 

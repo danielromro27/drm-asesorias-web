@@ -1084,8 +1084,8 @@ svg {
 
 @media (min-width: 1024px) {
   .founder-visual {
-    width: 42%;
-    max-width: 380px;
+    width: 38%;
+    max-width: 300px;
   }
 }
 
@@ -1112,11 +1112,10 @@ svg {
 
 .founder-portrait {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: auto;
+  display: block;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-ambient-lg);
-  object-fit: cover;
-  overflow: hidden;
 }
 
 .founder-quote-card {
@@ -1134,8 +1133,8 @@ svg {
 
 @media (min-width: 480px) {
   .founder-quote-card {
-    right: auto;
-    max-width: 320px;
+    right: 24px;
+    max-width: none;
   }
 }
 
@@ -1175,7 +1174,7 @@ svg {
 
 @media (min-width: 1024px) {
   .founder-content {
-    width: 58%;
+    width: 62%;
   }
 }
 
@@ -1698,25 +1697,21 @@ svg {
 }
 
 .case-card--client {
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(220, 192, 192, 0.4);
-  background-color: var(--color-surface-container-lowest);
-  align-items: flex-start;
-  text-align: left;
-  padding: 36px 32px;
+  padding: 0;
+  border: none;
+  background: none;
   min-height: 0;
-  gap: 14px;
+  height: 368px;
+  perspective: 1600px;
   opacity: 0;
-  transition: border-color 420ms var(--ease-premium),
-    box-shadow 420ms var(--ease-premium),
-    transform 420ms var(--ease-premium);
+  cursor: pointer;
+  border-radius: var(--radius-xl);
 }
 
-.case-card--client:hover {
-  border-color: rgba(122, 31, 43, 0.4);
-  box-shadow: var(--shadow-ambient-md);
-  transform: translateY(-6px);
+.case-card--client:focus-visible {
+  outline: 2.5px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-xl);
 }
 
 .reveal.is-visible .case-card--client {
@@ -1726,6 +1721,132 @@ svg {
 .reveal.is-visible .case-card--client:nth-child(1) { animation-delay: 0ms; }
 .reveal.is-visible .case-card--client:nth-child(2) { animation-delay: 90ms; }
 .reveal.is-visible .case-card--client:nth-child(3) { animation-delay: 180ms; }
+
+.case-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 700ms var(--ease-premium);
+  transform-style: preserve-3d;
+}
+
+.case-card--client:hover .case-flip-inner,
+.case-card--client:focus-visible .case-flip-inner,
+.case-card--client.is-flipped .case-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.case-flip-front,
+.case-flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(220, 192, 192, 0.4);
+  background-color: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-ambient-sm);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: border-color 420ms var(--ease-premium), box-shadow 420ms var(--ease-premium);
+}
+
+.case-card--client:hover .case-flip-front,
+.case-card--client:hover .case-flip-back,
+.case-card--client.is-flipped .case-flip-front,
+.case-card--client.is-flipped .case-flip-back {
+  border-color: rgba(122, 31, 43, 0.4);
+  box-shadow: var(--shadow-ambient-md);
+}
+
+.case-flip-front {
+  gap: 14px;
+}
+
+.case-flip-back {
+  transform: rotateY(180deg);
+  gap: 12px;
+  overflow: hidden;
+}
+
+.case-flip-hint {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.02em;
+}
+
+.case-flip-hint svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 320ms var(--ease-premium);
+}
+
+.case-card--client:hover .case-flip-hint svg,
+.case-card--client.is-flipped .case-flip-hint svg {
+  transform: translateX(3px);
+}
+
+.case-flip-back-title {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-deep-black);
+  line-height: 1.3;
+}
+
+.case-flip-desc {
+  color: var(--color-secondary);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.case-flip-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.case-flip-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.case-flip-block ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.case-flip-block li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--color-secondary);
+}
+
+.case-flip-block li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-cta-orange);
+}
 
 .case-card-header {
   display: flex;
@@ -1772,12 +1893,6 @@ svg {
   font-weight: 600;
   color: var(--color-primary);
   font-size: 0.9375rem;
-}
-
-.case-client-desc {
-  color: var(--color-secondary);
-  font-size: 0.875rem;
-  line-height: 1.7;
 }
 
 /* ==========================================================================
@@ -1963,6 +2078,10 @@ svg {
 .contact-channel-icon svg {
   width: 20px;
   height: 20px;
+}
+
+.contact-channel-icon svg [fill="#128C7E"] {
+  fill: currentColor;
 }
 
 .contact-channel:hover .contact-channel-icon {
