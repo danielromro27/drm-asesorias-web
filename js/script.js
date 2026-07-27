@@ -54,6 +54,127 @@
     });
   });
 
+  /* -------------------- Carrusel de empresas --------------------
+     Dos grupos de tarjetas con transición automática cada 8 s. La reproducción
+     se pausa al pasar el cursor, al enfocar con el teclado o al girar una
+     tarjeta, y se reanuda reiniciando el temporizador cuando termina la
+     interacción. Sin JS, los grupos quedan apilados y accesibles. */
+  var casesCarousel = document.querySelector('[data-cases-carousel]');
+
+  if (casesCarousel) {
+    var casesTrack = casesCarousel.querySelector('.cases-track');
+    var casesSlides = Array.prototype.slice.call(casesCarousel.querySelectorAll('.cases-slide'));
+    var casesDots = Array.prototype.slice.call(casesCarousel.querySelectorAll('.cases-dot'));
+
+    if (casesTrack && casesSlides.length > 1) {
+      var CASES_AUTOPLAY_MS = 8000;
+      var casesIndex = 0;
+      var casesTimer = null;
+      var casesHovering = false;
+      var casesFocusWithin = false;
+
+      casesCarousel.classList.add('is-ready');
+
+      var anyCaseFlipped = function () {
+        return casesCarousel.querySelector('.case-card--client.is-flipped') !== null;
+      };
+
+      var canCasesAutoplay = function () {
+        return !prefersReducedMotion && !casesHovering && !casesFocusWithin && !anyCaseFlipped();
+      };
+
+      var applyCasesState = function () {
+        var offset = casesIndex * (casesSlides[0].getBoundingClientRect().width || 0);
+        casesTrack.style.transform = 'translateX(' + (-offset) + 'px)';
+
+        casesSlides.forEach(function (slide, i) {
+          var active = i === casesIndex;
+          /* 'inert' oculta el grupo inactivo del foco y de la accesibilidad en
+             navegadores modernos; el tabindex asegura el mismo comportamiento
+             de foco en navegadores sin soporte de 'inert'. */
+          slide.inert = !active;
+          slide.querySelectorAll('.case-card--client').forEach(function (card) {
+            card.setAttribute('tabindex', active ? '0' : '-1');
+          });
+        });
+
+        casesDots.forEach(function (dot, i) {
+          var active = i === casesIndex;
+          dot.classList.toggle('is-active', active);
+          if (active) {
+            dot.setAttribute('aria-current', 'true');
+          } else {
+            dot.removeAttribute('aria-current');
+          }
+        });
+      };
+
+      var scheduleCases = function () {
+        if (casesTimer) {
+          window.clearTimeout(casesTimer);
+          casesTimer = null;
+        }
+        if (canCasesAutoplay()) {
+          casesTimer = window.setTimeout(function () {
+            goToCase((casesIndex + 1) % casesSlides.length);
+            scheduleCases();
+          }, CASES_AUTOPLAY_MS);
+        }
+      };
+
+      function goToCase(i) {
+        casesIndex = (i + casesSlides.length) % casesSlides.length;
+        applyCasesState();
+      }
+
+      casesDots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          goToCase(i);
+          scheduleCases();
+        });
+      });
+
+      casesCarousel.addEventListener('mouseenter', function () { casesHovering = true; scheduleCases(); });
+      casesCarousel.addEventListener('mouseleave', function () { casesHovering = false; scheduleCases(); });
+      casesCarousel.addEventListener('focusin', function () { casesFocusWithin = true; scheduleCases(); });
+      casesCarousel.addEventListener('focusout', function (event) {
+        if (!casesCarousel.contains(event.relatedTarget)) {
+          casesFocusWithin = false;
+        }
+        scheduleCases();
+      });
+      /* Girar una tarjeta (click o teclado) recalcula el estado de reproducción. */
+      casesCarousel.addEventListener('click', scheduleCases);
+      casesCarousel.addEventListener('keyup', scheduleCases);
+
+      /* Pausa mientras la pestaña no está visible; reanuda al volver. */
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          if (casesTimer) { window.clearTimeout(casesTimer); casesTimer = null; }
+        } else {
+          scheduleCases();
+        }
+      });
+
+      /* Recalcula el desplazamiento al cambiar el ancho (sin animar el reajuste). */
+      var casesResizeRaf = null;
+      window.addEventListener('resize', function () {
+        if (casesResizeRaf) { window.cancelAnimationFrame(casesResizeRaf); }
+        casesResizeRaf = window.requestAnimationFrame(function () {
+          var prev = casesTrack.style.transition;
+          casesTrack.style.transition = 'none';
+          applyCasesState();
+          /* Fuerza reflow para restaurar la transición sin animar el reajuste. */
+          void casesTrack.offsetWidth;
+          casesTrack.style.transition = prev;
+        });
+      }, { passive: true });
+
+      applyCasesState();
+      scheduleCases();
+    }
+  }
+
   /* -------------------- Header scroll transition -------------------- */
   var siteHeader = document.querySelector('.site-header');
 

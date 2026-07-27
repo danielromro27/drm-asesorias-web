@@ -95,6 +95,33 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Encuadre de navegación: cada sección compensa su propio espaciado interno
+   para que el título llegue a una posición equilibrada bajo el navbar,
+   en vez de quedar pegado arriba o desplazado "a mitad de sección".
+   Valores calibrados empíricamente por sección y por breakpoint.
+   "Fundador" es un caso especial: en móvil la fotografía se apila sobre el
+   texto, por lo que se prioriza encuadrar la sección completa (no el título)
+   para no saltar por encima de la imagen. */
+#servicios { scroll-margin-top: -58px; }
+#diferenciadores { scroll-margin-top: -68px; }
+#metodologia { scroll-margin-top: -84px; }
+#fundador { scroll-margin-top: 0px; }
+#drm-os { scroll-margin-top: -97px; }
+#casos { scroll-margin-top: -58px; }
+#faq { scroll-margin-top: -62px; }
+#contacto { scroll-margin-top: -72px; }
+
+@media (min-width: 1024px) {
+  #servicios { scroll-margin-top: -94px; }
+  #diferenciadores { scroll-margin-top: -103px; }
+  #metodologia { scroll-margin-top: -119px; }
+  #fundador { scroll-margin-top: -188px; }
+  #drm-os { scroll-margin-top: -140px; }
+  #casos { scroll-margin-top: -95px; }
+  #faq { scroll-margin-top: -97px; }
+  #contacto { scroll-margin-top: -155px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -315,7 +342,7 @@ svg {
 .nav-links {
   display: none;
   align-items: center;
-  gap: 20px;
+  gap: 26px;
 }
 
 @media (min-width: 1024px) {
@@ -326,7 +353,7 @@ svg {
 
 @media (min-width: 1280px) {
   .nav-links {
-    gap: 32px;
+    gap: 42px;
   }
 }
 
@@ -336,6 +363,8 @@ svg {
   font-weight: 600;
   color: var(--color-secondary);
   padding-bottom: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: color var(--dur-fast) var(--ease-standard);
 }
 
@@ -375,6 +404,12 @@ svg {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+@media (min-width: 1024px) {
+  .nav-cta-wrap {
+    display: none;
+  }
 }
 
 .nav-toggle {
@@ -489,11 +524,6 @@ svg {
   background-color: var(--color-surface-container-low);
   border-color: rgba(137, 113, 114, 0.55);
   transform: translateY(-2px);
-}
-
-.btn-nav {
-  padding: 12px 24px;
-  font-size: 0.875rem;
 }
 
 .btn-block {
@@ -826,6 +856,73 @@ svg {
   flex-shrink: 0;
 }
 
+/* --------------------------------------------------------------------------
+   Refinamiento "Servicios" — sección insignia
+   Objetivo: que Servicios se lea como la sección más importante después del
+   Hero, sin tocar tarjetas, iconos, colores ni estructura. Se trabaja solo
+   con escala tipográfica, ritmo vertical y un motivo de marca muy tenue.
+   Todo va ANIDADO bajo .services para no afectar a FAQ (que comparte
+   .section-intro / .section-heading).
+   -------------------------------------------------------------------------- */
+.services {
+  position: relative;
+}
+
+/* Jerarquía de 3 niveles: Hero (display) > Servicios > resto de secciones.
+   El título de la sección insignia recibe una escala propia, mayor que la
+   estándar (--fs-headline-md) pero por debajo del Hero. */
+.services .section-heading {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3.05rem);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+}
+
+/* Más aire alrededor del encabezado para separar mejor título y tarjetas. */
+.services .section-intro {
+  max-width: 52rem;
+  margin-bottom: 84px;
+}
+
+/* Motivo de marca derivado del isotipo (barras ascendentes + línea de
+   crecimiento con flecha), en el mismo lenguaje visual que el Hero.
+   Extremadamente sutil: reforzar identidad, no decorar. */
+.services::before {
+  content: "";
+  position: absolute;
+  top: clamp(24px, 6vw, 88px);
+  right: max(24px, 5vw);
+  width: clamp(150px, 22vw, 300px);
+  aspect-ratio: 260 / 200;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20260%20200%27%20fill%3D%27none%27%20stroke%3D%27%237a1f2b%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%2736%27%20y%3D%27150%27%20width%3D%2724%27%20height%3D%2734%27%20rx%3D%273%27%2F%3E%3Crect%20x%3D%2780%27%20y%3D%27120%27%20width%3D%2724%27%20height%3D%2764%27%20rx%3D%273%27%2F%3E%3Crect%20x%3D%27124%27%20y%3D%2792%27%20width%3D%2724%27%20height%3D%2792%27%20rx%3D%273%27%2F%3E%3Crect%20x%3D%27168%27%20y%3D%2762%27%20width%3D%2724%27%20height%3D%27122%27%20rx%3D%273%27%2F%3E%3Crect%20x%3D%27212%27%20y%3D%2730%27%20width%3D%2724%27%20height%3D%27154%27%20rx%3D%273%27%2F%3E%3Cpath%20d%3D%27M28%20168%20L232%2034%27%2F%3E%3Cpath%20d%3D%27M205%2034%20L232%2034%20L232%2061%27%2F%3E%3C%2Fsvg%3E") no-repeat center / contain;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* El contenido queda por encima del motivo. */
+.services > .container {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .services {
+    padding-block: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .services::before {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 900ms var(--ease-premium), transform 900ms var(--ease-premium);
+  }
+  .services.is-visible::before {
+    opacity: 0.05;
+    transform: translateY(0);
+  }
+}
+
 /* ==========================================================================
    Diferenciadores
    ========================================================================== */
@@ -1119,34 +1216,24 @@ svg {
 }
 
 .founder-quote-card {
-  position: absolute;
-  bottom: 24px;
-  left: 24px;
-  right: 24px;
-  padding: 28px;
+  margin-top: 20px;
+  padding: 26px;
   background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-ambient-lg);
+  box-shadow: var(--shadow-ambient-md);
   border: 1px solid rgba(220, 192, 192, 0.3);
 }
 
-@media (min-width: 480px) {
-  .founder-quote-card {
-    right: 24px;
-    max-width: none;
-  }
-}
-
 .founder-quote-card h4 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-deep-black);
   line-height: 1.3;
 }
 
 .founder-quote-card .role {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--color-primary);
   font-weight: 600;
   margin-top: 4px;
@@ -1155,14 +1242,14 @@ svg {
 .founder-quote-card hr {
   border: none;
   border-top: 1px solid rgba(220, 192, 192, 0.3);
-  margin: 16px 0;
+  margin: 14px 0;
 }
 
 .founder-quote-card blockquote {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 0.76rem;
   color: var(--color-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
   font-style: italic;
 }
 
@@ -1269,6 +1356,10 @@ svg {
   font-size: var(--fs-display-lg);
   font-weight: 700;
   line-height: 1.1;
+}
+
+.drm-os-brand {
+  color: #ff8b92;
 }
 
 .drm-os-title em {
@@ -1864,35 +1955,114 @@ svg {
   line-height: 1.35;
 }
 
-.case-status-badge {
+.case-client-title {
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+}
+
+/* Rubro (sector) de la empresa en el frente de la tarjeta */
+.case-client-sector {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-cta-orange-dark);
-  background-color: rgba(242, 140, 40, 0.1);
-  border: 1px solid rgba(242, 140, 40, 0.25);
+  color: var(--color-primary);
+  background-color: rgba(122, 31, 43, 0.07);
+  border: 1px solid rgba(122, 31, 43, 0.16);
   padding: 4px 10px;
   border-radius: var(--radius-full);
   white-space: nowrap;
 }
 
-.case-status-badge::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-cta-orange);
-  flex-shrink: 0;
+/* -------------------- Carrusel de empresas -------------------- */
+.cases-carousel {
+  position: relative;
 }
 
-.case-client-title {
-  font-weight: 600;
-  color: var(--color-primary);
-  font-size: 0.9375rem;
+/* Sin JS (progressive enhancement): los grupos se apilan y quedan todos
+   visibles y accesibles. La lógica de carrusel se activa al añadir .is-ready. */
+.cases-viewport {
+  overflow: visible;
+}
+
+.cases-track {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.cases-slide {
+  width: 100%;
+}
+
+.cases-dots {
+  display: none;
+}
+
+/* Con JS activo */
+.cases-carousel.is-ready .cases-viewport {
+  overflow: hidden;
+  padding: 10px;
+  margin-inline: -10px;
+}
+
+.cases-carousel.is-ready .cases-track {
+  flex-direction: row;
+  gap: 0;
+  transition: transform 640ms var(--ease-premium);
+  will-change: transform;
+}
+
+.cases-carousel.is-ready .cases-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+}
+
+.cases-carousel.is-ready .cases-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 44px;
+}
+
+/* Cada grupo muestra dos tarjetas grandes; en móvil se apilan */
+.cases-slide .cases-grid--clients {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .cases-slide .cases-grid--clients {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cases-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: rgba(122, 31, 43, 0.18);
+  cursor: pointer;
+  transition: background-color var(--dur-standard) var(--ease-premium),
+    width var(--dur-standard) var(--ease-premium);
+}
+
+.cases-dot:hover {
+  background-color: rgba(122, 31, 43, 0.4);
+}
+
+.cases-dot.is-active {
+  width: 28px;
+  background-color: var(--color-primary);
+}
+
+.cases-dot:focus-visible {
+  outline: 2.5px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
 /* ==========================================================================
@@ -2410,10 +2580,14 @@ svg {
 
 .footer-watermark {
   position: absolute;
-  top: 0;
-  left: 40px;
-  width: 160px;
-  opacity: 0.02;
+  top: auto;
+  left: auto;
+  right: 5%;
+  bottom: 0;
+  width: clamp(150px, 18vw, 220px);
+  height: auto;
+  color: var(--color-primary);
+  opacity: 0.035;
   z-index: 0;
   pointer-events: none;
 }
