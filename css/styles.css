@@ -1328,6 +1328,12 @@ svg {
   line-height: 1.7;
 }
 
+/* Frase de cierre que refuerza confianza: leve énfasis, sin alterar el layout. */
+.founder-commitment {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 .founder-badges {
   display: flex;
   flex-wrap: wrap;
@@ -1827,6 +1833,14 @@ svg {
   font-style: normal;
   font-size: 0.9375rem;
   line-height: 1.7;
+}
+
+/* Línea de contexto discreta bajo el título de Empresas. */
+.cases-subline {
+  margin-top: 12px;
+  color: var(--color-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 .cases-grid {
@@ -2576,6 +2590,15 @@ svg {
   max-width: 46em;
   font-size: 0.8125rem;
   line-height: 1.7;
+  color: rgba(95, 94, 94, 0.9);
+}
+
+/* Aviso legal discreto al pie. Se mantiene sutil por el tamaño, con contraste
+   suficiente (AA) sobre el fondo claro del footer. */
+.footer-legal {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  line-height: 1.6;
   color: rgba(95, 94, 94, 0.9);
 }
 
