@@ -575,7 +575,7 @@ svg {
   z-index: 0;
   opacity: 0.035;
   pointer-events: none;
-  color: var(--color-deep-black);
+  color: var(--color-primary);
 }
 
 .hero-grid {
@@ -643,11 +643,49 @@ svg {
   line-height: 1.65;
 }
 
+/* Línea de posicionamiento: complementa al texto descriptivo sin competir con
+   el título (menor tamaño, sans-serif, con un acento breve). Se acerca al
+   subtítulo para leerse como una misma unidad. */
+.hero-tagline {
+  align-self: flex-start;
+  margin-top: -24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--fs-body-md);
+  font-weight: 600;
+  color: var(--color-primary);
+  line-height: 1.4;
+}
+
+.hero-tagline::before {
+  content: "";
+  flex-shrink: 0;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--color-cta-orange);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding-top: 4px;
+}
+
+/* Botón secundario del Hero: más presencia frente al fondo claro (borde más
+   definido + superficie neutra sutil), manteniéndolo por debajo del CTA
+   naranja. Se limita al Hero para no alterar otros botones secundarios. */
+.hero-actions .btn-secondary {
+  background-color: var(--color-surface-container-low);
+  border-color: rgba(17, 17, 17, 0.22);
+  color: var(--color-deep-black);
+}
+
+.hero-actions .btn-secondary:hover {
+  background-color: var(--color-surface-container);
+  border-color: rgba(17, 17, 17, 0.4);
 }
 
 .hero-visual {
@@ -780,8 +818,24 @@ svg {
   }
 }
 
+/* Aparición de las tarjetas de Servicios al llegar a la sección durante el
+   scroll: fade-up sutil y escalonado. Keyframe propio (no comparte el de las
+   tarjetas de Empresas) para tunearlo sin afectar otras secciones.
+   Solo anima opacity y transform (buen rendimiento) y respeta
+   prefers-reduced-motion vía la regla global (animation-duration ~0). */
+@keyframes pillar-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .reveal.is-visible .pillar-card {
-  animation: card-stagger-in 560ms var(--ease-premium) both;
+  animation: pillar-rise 640ms var(--ease-premium) both;
 }
 
 .reveal.is-visible .pillar-card:nth-child(1) { animation-delay: 0ms; }
@@ -1351,11 +1405,36 @@ svg {
   text-transform: uppercase;
 }
 
+/* Fila que agrupa la etiqueta con el badge discreto "En desarrollo". */
+.drm-os-tagrow {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Badge discreto: comunica que DRM OS es parte de la visión, aún no el
+   servicio principal. Tono apagado para no restar peso al negocio actual. */
+.drm-os-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .drm-os-title {
   font-family: var(--font-display);
-  font-size: var(--fs-display-lg);
+  font-size: var(--fs-headline-md);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .drm-os-brand {
@@ -1821,10 +1900,18 @@ svg {
   transform-style: preserve-3d;
 }
 
-.case-card--client:hover .case-flip-inner,
 .case-card--client:focus-visible .case-flip-inner,
 .case-card--client.is-flipped .case-flip-inner {
   transform: rotateY(180deg);
+}
+
+/* El giro por hover solo aplica a punteros de precisión (mouse). En pantallas
+   táctiles el "hover pegajoso" mantenía la tarjeta girada tras un toque, por lo
+   que en táctil el giro lo controla exclusivamente .is-flipped (toggle por JS). */
+@media (hover: hover) and (pointer: fine) {
+  .case-card--client:hover .case-flip-inner {
+    transform: rotateY(180deg);
+  }
 }
 
 .case-flip-front,
@@ -1845,12 +1932,20 @@ svg {
   transition: border-color 420ms var(--ease-premium), box-shadow 420ms var(--ease-premium);
 }
 
-.case-card--client:hover .case-flip-front,
-.case-card--client:hover .case-flip-back,
+.case-card--client:focus-visible .case-flip-front,
+.case-card--client:focus-visible .case-flip-back,
 .case-card--client.is-flipped .case-flip-front,
 .case-card--client.is-flipped .case-flip-back {
   border-color: rgba(122, 31, 43, 0.4);
   box-shadow: var(--shadow-ambient-md);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .case-card--client:hover .case-flip-front,
+  .case-card--client:hover .case-flip-back {
+    border-color: rgba(122, 31, 43, 0.4);
+    box-shadow: var(--shadow-ambient-md);
+  }
 }
 
 .case-flip-front {
@@ -1880,9 +1975,15 @@ svg {
   transition: transform 320ms var(--ease-premium);
 }
 
-.case-card--client:hover .case-flip-hint svg,
+.case-card--client:focus-visible .case-flip-hint svg,
 .case-card--client.is-flipped .case-flip-hint svg {
   transform: translateX(3px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .case-card--client:hover .case-flip-hint svg {
+    transform: translateX(3px);
+  }
 }
 
 .case-flip-back-title {
@@ -2014,6 +2115,7 @@ svg {
   gap: 0;
   transition: transform 640ms var(--ease-premium);
   will-change: transform;
+  touch-action: pan-y;
 }
 
 .cases-carousel.is-ready .cases-slide {

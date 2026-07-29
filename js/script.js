@@ -38,6 +38,10 @@
     });
   });
 
+  /* Bandera compartida: un deslizamiento (swipe) del carrusel no debe además
+     girar la tarjeta que quedó bajo el dedo. El módulo del carrusel la activa. */
+  var suppressCaseClick = false;
+
   /* -------------------- Tarjetas de empresas: efecto flip -------------------- */
   document.querySelectorAll('.case-card--client').forEach(function (card) {
     function toggleFlip() {
@@ -45,7 +49,10 @@
       card.setAttribute('aria-pressed', String(isFlipped));
     }
 
-    card.addEventListener('click', toggleFlip);
+    card.addEventListener('click', function () {
+      if (suppressCaseClick) { return; }
+      toggleFlip();
+    });
     card.addEventListener('keydown', function (event) {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
@@ -155,6 +162,75 @@
           scheduleCases();
         }
       });
+
+      /* -------------------- Deslizar con el dedo (swipe) --------------------
+         Cambia de grupo arrastrando horizontalmente, sin perder los dots.
+         Bloqueo de eje: si el gesto es vertical, se respeta el scroll normal
+         de la página; si es horizontal, la pista sigue al dedo y hace "snap"
+         al soltar. La CSS 'touch-action: pan-y' habilita esta convivencia. */
+      var casesDragging = false;
+      var casesAxis = null; /* 'x' | 'y' | null */
+      var casesStartX = 0;
+      var casesStartY = 0;
+      var casesDX = 0;
+      var casesSlideW = 0;
+
+      var casesBaseOffset = function () {
+        return -casesIndex * (casesSlides[0].getBoundingClientRect().width || 0);
+      };
+
+      casesTrack.addEventListener('touchstart', function (event) {
+        if (event.touches.length !== 1) { return; }
+        casesDragging = true;
+        casesAxis = null;
+        casesStartX = event.touches[0].clientX;
+        casesStartY = event.touches[0].clientY;
+        casesDX = 0;
+        casesSlideW = casesSlides[0].getBoundingClientRect().width || 0;
+        casesTrack.style.transition = 'none';
+      }, { passive: true });
+
+      casesTrack.addEventListener('touchmove', function (event) {
+        if (!casesDragging || event.touches.length !== 1) { return; }
+        var dx = event.touches[0].clientX - casesStartX;
+        var dy = event.touches[0].clientY - casesStartY;
+        if (casesAxis === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+          casesAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        }
+        if (casesAxis !== 'x') { return; }
+        casesDX = dx;
+        var maxOffset = 0;
+        var minOffset = -(casesSlides.length - 1) * casesSlideW;
+        var target = casesBaseOffset() + dx;
+        /* Resistencia elástica en los extremos. */
+        if (target > maxOffset) { target = maxOffset + (target - maxOffset) * 0.35; }
+        if (target < minOffset) { target = minOffset + (target - minOffset) * 0.35; }
+        casesTrack.style.transform = 'translateX(' + target + 'px)';
+      }, { passive: true });
+
+      var endCasesDrag = function () {
+        if (!casesDragging) { return; }
+        casesDragging = false;
+        casesTrack.style.transition = '';
+        if (casesAxis === 'x') {
+          /* Gesto horizontal: se evita que el "click" sintético gire la tarjeta. */
+          suppressCaseClick = true;
+          window.setTimeout(function () { suppressCaseClick = false; }, 400);
+          var threshold = Math.min(80, casesSlideW * 0.18);
+          if (casesDX <= -threshold && casesIndex < casesSlides.length - 1) {
+            goToCase(casesIndex + 1);
+          } else if (casesDX >= threshold && casesIndex > 0) {
+            goToCase(casesIndex - 1);
+          } else {
+            applyCasesState();
+          }
+          scheduleCases();
+        }
+        casesAxis = null;
+      };
+
+      casesTrack.addEventListener('touchend', endCasesDrag, { passive: true });
+      casesTrack.addEventListener('touchcancel', endCasesDrag, { passive: true });
 
       /* Recalcula el desplazamiento al cambiar el ancho (sin animar el reajuste). */
       var casesResizeRaf = null;
@@ -288,6 +364,10 @@
       },
       message: function (value) {
         return value.trim().length >= 10 ? '' : 'Cuéntenos un poco más (mínimo 10 caracteres).';
+      },
+      phone: function (value) {
+        var v = value.trim();
+        return /^[0-9+()\s-]{8,}$/.test(v) ? '' : 'Ingrese un teléfono de contacto válido.';
       }
     };
 
@@ -310,7 +390,7 @@
       return !message;
     }
 
-    ['fullname', 'email', 'message'].forEach(function (fieldName) {
+    ['fullname', 'email', 'phone', 'message'].forEach(function (fieldName) {
       var inputEl = form.elements[fieldName];
       if (inputEl) {
         inputEl.addEventListener('blur', function () {
@@ -322,7 +402,7 @@
     form.addEventListener('submit', function (event) {
       event.preventDefault();
 
-      var isValid = ['fullname', 'email', 'message']
+      var isValid = ['fullname', 'email', 'phone', 'message']
         .map(validateField)
         .every(Boolean);
 
@@ -346,36 +426,46 @@
 
       var submitButton = form.querySelector('button[type="submit"]');
       var originalButtonText = submitButton.textContent;
+      /* Evita envíos múltiples mientras se procesa la solicitud. */
       submitButton.disabled = true;
       submitButton.textContent = 'Enviando...';
       statusEl.className = 'form-status';
       statusEl.textContent = '';
 
-      // Envío real mediante el endpoint AJAX de FormSubmit (https://formsubmit.co/).
-      // IMPORTANTE: la primera vez que este formulario reciba un envío real,
-      // FormSubmit enviará un correo de activación a contacto@drmasesorias.cl
-      // pidiendo confirmar la casilla antes de empezar a reenviar los mensajes.
-      var formAction = form.getAttribute('action').replace(
-        'https://formsubmit.co/',
-        'https://formsubmit.co/ajax/'
-      );
+      /* Envío real vía Web3Forms (https://web3forms.com), ideal para sitios
+         estáticos. La access_key es PÚBLICA (segura de exponer en el HTML).
+         Si aún no se ha configurado, avisamos con un error claro y una nota en
+         consola para quien administra el sitio. */
+      var accessKeyEl = form.elements['access_key'];
+      var accessKey = accessKeyEl ? String(accessKeyEl.value).trim() : '';
+      if (!accessKey || accessKey.indexOf('PEGA_AQUI') !== -1) {
+        console.error('[DRM] Falta la access_key de Web3Forms. Obtenla gratis en https://web3forms.com y pégala en el <input type="hidden" name="access_key"> del formulario.');
+        statusEl.className = 'form-status is-error';
+        statusEl.textContent = 'No pudimos enviar su solicitud en este momento. Por favor, escríbanos directamente a contacto@drmasesorias.cl.';
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        return;
+      }
 
-      fetch(formAction, {
+      fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
         body: new FormData(form)
       })
         .then(function (response) {
-          if (!response.ok) {
-            throw new Error('Respuesta no exitosa del servidor de formularios.');
-          }
-          return response.json();
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
         })
-        .then(function () {
-          statusEl.className = 'form-status is-success';
-          statusEl.textContent = 'Gracias. Hemos recibido su solicitud y le responderemos en menos de 24 horas hábiles.';
-          trackEvent('form_submit', { event_category: 'contacto', event_label: 'formulario_contacto' });
-          form.reset();
+        .then(function (result) {
+          if (result.ok && result.data && result.data.success) {
+            statusEl.className = 'form-status is-success';
+            statusEl.textContent = 'Gracias. Hemos recibido su solicitud y le responderemos en menos de 24 horas hábiles.';
+            trackEvent('form_submit', { event_category: 'contacto', event_label: 'formulario_contacto' });
+            form.reset();
+          } else {
+            throw new Error((result.data && result.data.message) || 'Respuesta no exitosa del servidor de formularios.');
+          }
         })
         .catch(function () {
           statusEl.className = 'form-status is-error';

@@ -97,7 +97,7 @@
   },
   "sameAs": [
     "https://www.instagram.com/drmasesorias",
-    "https://www.linkedin.com/company/drm-asesorias"
+    "https://www.linkedin.com/company/135296197"
   ]
 }
 </script>
@@ -369,21 +369,26 @@
       <path d="M0,860 L400,780 L820,830 L1200,600 L1440,520" fill="none" stroke="currentColor" stroke-width="1"/>
     </svg>
 
-    <svg class="hero-watermark" viewBox="0 0 200 200" aria-hidden="true">
-      <rect x="20" y="20" width="160" height="160" rx="24" fill="none" stroke="currentColor" stroke-width="1"/>
-      <rect x="50" y="50" width="100" height="100" rx="16" fill="none" stroke="currentColor" stroke-width="1"/>
-      <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
+    <svg class="hero-watermark" viewBox="0 0 260 200" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="36" y="150" width="24" height="34" rx="3"/>
+      <rect x="80" y="120" width="24" height="64" rx="3"/>
+      <rect x="124" y="92" width="24" height="92" rx="3"/>
+      <rect x="168" y="62" width="24" height="122" rx="3"/>
+      <rect x="212" y="30" width="24" height="154" rx="3"/>
+      <path d="M28 168 L232 34"/>
+      <path d="M205 34 L232 34 L232 61"/>
     </svg>
 
     <div class="container hero-grid">
       <div class="hero-copy">
-        <span class="hero-badge">Acompañamiento Estratégico Senior</span>
+        <span class="hero-badge">Soluciones Estratégicas para PYMEs</span>
         <h1 class="hero-title" id="hero-title">
           Más que asesorías.<br><em>Un aliado estratégico para tu empresa.</em>
         </h1>
         <p class="hero-subtitle">
-          Impulsamos mejores decisiones para hacer crecer tu empresa, fortaleciendo su gestión con soluciones en finanzas, contabilidad, procesos y estrategia.
+          Ayudamos a las PYMEs a ordenar su gestión, optimizar sus procesos y tomar mejores decisiones para crecer.
         </p>
+        <p class="hero-tagline">Más orden. Más control. Mejores decisiones.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#contacto">Agendar mi Diagnóstico</a>
           <a class="btn btn-secondary" href="#servicios">Nuestra Propuesta</a>
@@ -559,7 +564,7 @@
       <div class="diff-grid">
         <div>
           <span class="eyebrow">La Ventaja DRM</span>
-          <h2 class="section-heading diff-heading" id="diff-title">¿Por qué las empresas eligen evolucionar con DRM Asesorías?</h2>
+          <h2 class="section-heading diff-heading" id="diff-title">Ordenamos tu empresa para que puedas enfocarte en hacerla crecer.</h2>
           <p class="diff-intro">Combinamos estrategia, ejecución y acompañamiento para ayudar a las empresas a tomar mejores decisiones, optimizar su gestión y crecer con información confiable.</p>
 
           <div class="diff-feature-grid">
@@ -695,7 +700,10 @@
   <section class="section drm-os reveal" id="drm-os" aria-labelledby="drmos-title">
     <div class="container drm-os-grid">
       <div class="drm-os-copy">
-        <span class="drm-os-tag">Nuestra Evolución</span>
+        <div class="drm-os-tagrow">
+          <span class="drm-os-tag">Nuestra Evolución</span>
+          <span class="drm-os-badge">En desarrollo</span>
+        </div>
         <h2 class="drm-os-title" id="drmos-title"><span class="drm-os-brand">DRM OS</span><br><em>El copiloto estratégico de tu empresa.</em></h2>
         <p>DRM OS integra la información financiera, administrativa y operacional de su empresa en una misma mirada estratégica. No es un software independiente: es la evolución natural de nuestra metodología de acompañamiento, pensada para apoyar decisiones más rápidas y mejor informadas.</p>
 
@@ -1082,8 +1090,8 @@
         <div class="contact-info">
           <div class="contact-info-glow" aria-hidden="true"></div>
           <div class="contact-info-content">
-            <h2 id="contacto-title">Hablemos de su próxima etapa de crecimiento.</h2>
-            <p>Inicie una conversación sin compromiso. Evaluaremos juntos si nuestra metodología es el motor que su empresa necesita hoy.</p>
+            <h2 id="contacto-title">Conversemos sobre tu empresa.</h2>
+            <p>Agenda un diagnóstico inicial y descubre oportunidades de mejora.</p>
 
             <div class="contact-channels">
               <a class="contact-channel" href="mailto:contacto@drmasesorias.cl">
@@ -1104,14 +1112,27 @@
 
         <div class="contact-form-wrap">
           <form class="contact-form" id="contact-form" novalidate
-                action="https://formsubmit.co/contacto@drmasesorias.cl" method="POST">
-            <!-- Configuración de FormSubmit: metadatos del envío -->
-            <input type="hidden" name="_subject" value="Nuevo contacto desde la web de DRM Asesorías">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://drmasesorias.cl/#contacto">
+                action="https://api.web3forms.com/submit" method="POST">
+            <!-- ================== CONFIGURACIÓN DEL FORMULARIO (Web3Forms) ==================
+                 El formulario se envía con Web3Forms (https://web3forms.com), pensado para
+                 sitios estáticos. La "access_key" es PÚBLICA: es seguro dejarla en el HTML.
 
-            <!-- Honeypot anti-spam: campo señuelo, invisible para personas, visible para bots -->
+                 PASO ÚNICO PARA DEJARLO OPERATIVO:
+                 1) Entra a https://web3forms.com
+                 2) Escribe el correo donde quieres RECIBIR los mensajes
+                    (contacto@drmasesorias.cl) y pulsa "Create Access Key".
+                 3) Revisa ese correo, confirma, y copia la Access Key que te entregan.
+                 4) Pega esa clave abajo, reemplazando PEGA_AQUI_TU_ACCESS_KEY_DE_WEB3FORMS.
+                 (No hace falta nada más: sin backend, sin cuenta de pago.) -->
+            <input type="hidden" name="access_key" value="value="225dea0e-f428-49dd-90d1-0761ad91be64"">
+            <input type="hidden" name="subject" value="Nuevo contacto desde la web de DRM Asesorías">
+            <input type="hidden" name="from_name" value="Web DRM Asesorías">
+            <input type="hidden" name="redirect" value="https://drmasesorias.cl/#contacto">
+
+            <!-- Honeypot nativo de Web3Forms (anti-spam del lado del servidor) -->
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none !important;">
+
+            <!-- Honeypot adicional: campo señuelo, invisible para personas, visible para bots -->
             <div class="hp-field" aria-hidden="true">
               <label for="_honeypot">No completar este campo</label>
               <input type="text" id="_honeypot" name="_honeypot" tabindex="-1" autocomplete="off">
@@ -1129,10 +1150,17 @@
               </div>
             </div>
 
-            <div class="form-field">
-              <label for="email">Email Corporativo</label>
-              <input type="email" id="email" name="email" placeholder="juan@empresa.cl" autocomplete="email" required aria-describedby="email-error">
-              <span class="form-error" id="email-error" role="alert"></span>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="email">Email Corporativo</label>
+                <input type="email" id="email" name="email" placeholder="juan@empresa.cl" autocomplete="email" required aria-describedby="email-error">
+                <span class="form-error" id="email-error" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="phone">Teléfono</label>
+                <input type="tel" id="phone" name="phone" placeholder="+56 9 1234 5678" autocomplete="tel" required aria-describedby="phone-error">
+                <span class="form-error" id="phone-error" role="alert"></span>
+              </div>
             </div>
 
             <div class="form-field">
@@ -1190,8 +1218,7 @@
       <div class="footer-col">
         <span class="heading">Síguenos</span>
         <a href="https://www.instagram.com/drmasesorias" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <!-- NOTA: reemplazar por la URL definitiva de LinkedIn de la compañía -->
-        <a href="https://www.linkedin.com/company/drm-asesorias" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://www.linkedin.com/company/135296197" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </div>
       <div class="footer-col footer-col--cta">
         <span class="heading">Contacto</span>
